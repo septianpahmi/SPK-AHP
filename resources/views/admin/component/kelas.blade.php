@@ -42,7 +42,6 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Tingkat</th>
-                                        <th>Jurusan</th>
                                         <th>Kelas</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -50,78 +49,80 @@
                                 <tbody>
                                     @foreach ($data as $item)
                                         <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->tingkat}}</td>
-                                            <td>{{$item->jurusan}}</td>
-                                            <td>{{$item->kelas}}</td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->tingkat }}</td>
+                                            <td>{{ $item->kelas }}</td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#kelas{{$item->id}}">
-                                                      <i class="fas fa-edit"></i>
+                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
+                                                        data-target="#kelas{{ $item->id }}">
+                                                        <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <button url="{{route('kelas.delete',$item->id)}}" type="button" class="btn btn-danger delete" data-id="{{ $item->id }}">
-                                                      <i class="fas fa-trash"></i>
+                                                    <button url="{{ route('kelas.delete', $item->id) }}" type="button"
+                                                        class="btn btn-danger delete" data-id="{{ $item->id }}">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
-                                                  </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
                             </table>
                         </div>
-                        @foreach ($data as $item)                          
-                        <div class="modal fade" id="kelas{{$item->id}}">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Edit Kelas</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                        @foreach ($data as $item)
+                            <div class="modal fade" id="kelas{{ $item->id }}">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Edit Kelas</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('kelas.update', $item->id) }}" method="POST"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Tingkat</label>
+                                                            <input type="text" class="form-control" name="tingkat"
+                                                                value="{{ $item->tingkat }}"
+                                                                placeholder="Masukan tingkat kelas" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Kelas</label>
+                                                            <input type="text" class="form-control" name="kelas"
+                                                                value="{{ $item->kelas }}" placeholder="Masukan kelas"
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- /.modal-content -->
                                     </div>
-                                    <div class="modal-body">
-                                        <form action="{{route('kelas.update',$item->id)}}" method="POST" enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                  <div class="form-group">
-                                                    <label>Tingkat</label>
-                                                    <input type="text" class="form-control" name="tingkat" value="{{$item->tingkat}}" placeholder="Masukan tingkat kelas" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                  <div class="form-group">
-                                                    <label>Jurusan</label>
-                                                    <input type="text" class="form-control" name="jurusan" value="{{$item->jurusan}}" placeholder="Masukan jurusan" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                  <div class="form-group">
-                                                    <label>Kelas</label>
-                                                    <input type="text" class="form-control" name="kelas" value="{{$item->kelas}}" placeholder="Masukan kelas" required>
-                                                  </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                        
-                                    <!-- /.modal-content -->
+                                    <!-- /.modal-dialog -->
                                 </div>
-                                <!-- /.modal-dialog -->
+                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card-body -->
-                        </div>
                         @endforeach
-                    <!-- /.card -->
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
+                <!-- /.row -->
             </div>
-            <!-- /.row -->
-        </div>
-        <!-- /.container-fluid -->
+            <!-- /.container-fluid -->
     </section>
 </div>
 @include('admin.partial.footer')

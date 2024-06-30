@@ -59,7 +59,7 @@
                                                     <option value="9">Extrem Penting (Nilai = 9)</option>
                                                 </select>
                                             </td>
-                                            <td>Tangguangan</td>
+                                            <td>Tanggungan</td>
                                         </tr>
                                         <tr>
                                             <td>Penghasilan</td>

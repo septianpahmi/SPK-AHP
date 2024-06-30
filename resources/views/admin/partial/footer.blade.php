@@ -3,14 +3,6 @@
 </aside>
 <!-- /.control-sidebar -->
 
-<!-- Main Footer -->
-<footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-        <b>Developed by</b> Geugeut Aulia
-    </div>
-</footer>
 </div>
 <!-- ./wrapper -->
 
@@ -60,7 +52,8 @@
 <script src="../../plugins/bs-stepper/js/bs-stepper.min.js"></script>
 <!-- dropzonejs -->
 <script src="../../plugins/dropzone/min/dropzone.min.js"></script>
-
+<!-- Filterizr-->
+<script src="../plugins/filterizr/jquery.filterizr.min.js"></script>
 <script>
     $(function() {
         $("#example1").DataTable({
@@ -287,8 +280,31 @@
     }
     // DropzoneJS Demo Code End
 </script>
+<!-- bs-custom-file-input -->
+<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script>
+    $(function() {
+        bsCustomFileInput.init();
+    });
+</script>
+<script>
+    $(function() {
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox({
+                alwaysShowClose: true
+            });
+        });
 
-
+        $('.filter-container').filterizr({
+            gutterPixels: 3
+        });
+        $('.btn[data-filter]').on('click', function() {
+            $('.btn[data-filter]').removeClass('active');
+            $(this).addClass('active');
+        });
+    })
+</script>
 </body>
 
 </html>

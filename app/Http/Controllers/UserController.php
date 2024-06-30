@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataSiswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,9 +20,15 @@ class UserController extends Controller
         if ($existingUser) {
             return redirect('/users')->with('error', 'Email sudah digunakan.');
         }
+        $existingnis = User::where('nis', $request->nis)->first();
+
+        if ($existingnis) {
+            return redirect('/users')->with('error', 'NIS sudah digunakan.');
+        }
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->nis = $request->nis;
         $user->password = bcrypt($request->input('password'));
         $user->kode_akses = $request->password;
         $user->role = $request->role;
@@ -40,6 +47,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->nis = $request->nis;
         $user->password = bcrypt($request->input('password'));
         $user->kode_akses = $request->password;
         $user->role = $request->role;

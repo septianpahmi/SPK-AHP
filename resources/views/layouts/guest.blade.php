@@ -7,16 +7,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <link href="/images/logo-sma.png" rel="icon">
+    <link href="/images/logo-sma.png" rel="apple-touch-icon">
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('fonts/material-icon/css/material-design-iconic-font.min.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/main.js') }}" defer></script>
+
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/vendor/jquery/jquery.min.js') }}" defer></script>
 </head>
 

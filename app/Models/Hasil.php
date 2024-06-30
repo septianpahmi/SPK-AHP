@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Hasil extends Model
 {
     use HasFactory;
-    protected $fillable = ['id_siswa', 'id_beasiswa', 'penghasilan', 'tanggungan', 'pekerjaan', 'asset', 'ahp'];
+    protected $fillable = ['id_siswa', 'id_beasiswa', 'id_peserta', 'id_kelas', 'penghasilan', 'tanggungan', 'pekerjaan', 'asset', 'ahp'];
 
     public function idSiswa()
     {
@@ -17,5 +17,13 @@ class Hasil extends Model
     public function idBeasiswa()
     {
         return $this->belongsTo(Beasiswa::class, 'id_beasiswa');
+    }
+    public function idPeserta()
+    {
+        return $this->belongsTo(Peserta::class, 'id_peserta');
+    }
+    public function idKelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
     }
 }

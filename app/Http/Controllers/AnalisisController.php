@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Hasil;
+use App\Models\Kelas;
+use App\Models\Kuota;
 use App\Models\Peserta;
+use App\Models\Beasiswa;
 use App\Models\Comparisons;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -312,7 +316,9 @@ class AnalisisController extends Controller
 
         // Menghitung CR
         $cr = $ci / 0.90;
+        $data = Beasiswa::all();
         return view('admin.component.ahp.index4', [
+            'data' => $data,
             'k1' => $k1,
             'k2' => $k2,
             'k3' => $k3,
@@ -352,47 +358,55 @@ class AnalisisController extends Controller
 
     public function posthasilrekomendasi(Request $request)
     {
-        $penghasilan = Comparisons::select('penghasilan')->orderBy('id_siswa', 'asc')->get();
-        $tanggungan = Comparisons::select('tanggungan')->orderBy('id_siswa', 'asc')->get();
-        $pekerjaan = Comparisons::select('pekerjaan')->orderBy('id_siswa', 'asc')->get();
-        $asset = Comparisons::select('asset')->orderBy('id_siswa', 'asc')->get();
+        $id = $request->beasiswa;
+        $penghasilan = Comparisons::select('penghasilan')->where('id_beasiswa', $id)->orderBy('id_siswa', 'asc')->get();
+        $tanggungan = Comparisons::select('tanggungan')->where('id_beasiswa', $id)->orderBy('id_siswa', 'asc')->get();
+        $pekerjaan = Comparisons::select('pekerjaan')->where('id_beasiswa', $id)->orderBy('id_siswa', 'asc')->get();
+        $asset = Comparisons::select('asset')->where('id_beasiswa', $id)->orderBy('id_siswa', 'asc')->get();
 
         // variabel penampung nilai kedalam array
-        $datapenghasilanarr = [];
-        $datatanggunganarr = [];
-        $datapekerjaanarr = [];
-        $datasetarr = [];
+        $datahargaarr = [];
+        $datalantaiarr = [];
+        $dataluasarr = [];
+        $datakamararr = [];
 
         // buat masukin data kedalam bentuk array
-        foreach ($penghasilan as $itempeng) {
-            $datapenghasilanarr[] = $itempeng->penghasilan;
-        }
-        foreach ($tanggungan as $itemtang) {
-            $datatanggunganarr[] = $itemtang->tanggungan;
-        }
-        foreach ($pekerjaan as $itempek) {
-            $datapekerjaanarr[] = $itempek->pekerjaan;
-        }
-        foreach ($asset as $itemas) {
-            $datasetarr[] = $itemas->asset;
+        foreach ($penghasilan as $itemh) {
+            $datahargaarr[] = $itemh->penghasilan;
         }
 
-        $t26 = $request->k26;
-        $t27 = $request->k27;
-        $t28 = $request->k28;
+        foreach ($tanggungan as $iteml) {
+            $datalantaiarr[] = $iteml->tanggungan;
+        }
 
-        // kriteria penghasilan
-        $hasilpeng = [];
+        foreach ($pekerjaan as $items) {
+            $dataluasarr[] = $items->pekerjaan;
+        }
+
+        foreach ($asset as $itemk) {
+            $datakamararr[] = $itemk->asset;
+        }
+
+        // buat manggil data arraynya
+        // dd($datahargaarr, $datalantaiarr, $dataluasarr, $datakamararr, $datagarasiarr);
+
+        $t31 = $request->k25;
+        $t32 = $request->k26;
+        $t33 = $request->k27;
+        $t34 = $request->k28;
+
+        // kriteria harga
+        $hasilh = [];
         $hasiljmlh = 0;
         $j = 0;
         $n = 0;
         $i = 0;
-        for ($m = 0; $m < (sizeof($datapenghasilanarr) * sizeof($datapenghasilanarr)) + (sizeof($datapenghasilanarr) - 1); $m++) {
-            if ($i < sizeof($datapenghasilanarr)) {
-                $hasilpeng[$n] = $datapenghasilanarr[$i] / $datapenghasilanarr[$j];
+        for ($m = 0; $m < (sizeof($datahargaarr) * sizeof($datahargaarr)) + (sizeof($datahargaarr) - 1); $m++) {
+            if ($i < sizeof($datahargaarr)) {
+                $hasilh[$n] = $datahargaarr[$i] / $datahargaarr[$j];
                 $i++;
                 $n++;
-            } else if ($j < sizeof($datapenghasilanarr)) {
+            } else if ($j < sizeof($datahargaarr)) {
                 $j++;
                 $i = 0;
             } else {
@@ -401,25 +415,25 @@ class AnalisisController extends Controller
         }
 
         // Jumlah kolom dan baris
-        $barispeng = sizeof($datapenghasilanarr);
-        $kolompeng = sizeof($datapenghasilanarr);
-        $data2Dpeng = array();
+        $barish = sizeof($datahargaarr);
+        $kolomh = sizeof($datahargaarr);
+        $data2Dh = array();
 
         // konversi jadi array 2d
         $counter = 0;
-        for ($i = 0; $i < $barispeng; $i++) {
-            for ($j = 0; $j < $kolompeng; $j++) {
-                $data2Dpeng[$i][$j] = $hasilpeng[$counter];
+        for ($i = 0; $i < $barish; $i++) {
+            for ($j = 0; $j < $kolomh; $j++) {
+                $data2Dh[$i][$j] = $hasilh[$counter];
                 $counter++;
             }
         }
 
         // menghitung jumlah
         $hasiljmlh = array();
-        for ($i = 0; $i < $kolompeng; $i++) {
+        for ($i = 0; $i < $kolomh; $i++) {
             $jumlah = 0;
-            for ($j = 0; $j < $barispeng; $j++) {
-                $jumlah += $data2Dpeng[$j][$i];
+            for ($j = 0; $j < $barish; $j++) {
+                $jumlah += $data2Dh[$j][$i];
             }
             $hasiljmlh[] = $jumlah;
         }
@@ -428,9 +442,9 @@ class AnalisisController extends Controller
         $z = 0;
         $hasilbgh = [];
         $i = 0;
-        for ($m = 0; $m < (sizeof($datapenghasilanarr) * sizeof($datapenghasilanarr)) + (sizeof($datapenghasilanarr) - 1); $m++) {
-            if ($i < sizeof($datapenghasilanarr)) {
-                $hasilbgh[$z] = $hasilpeng[$z] / $hasiljmlh[$i];
+        for ($m = 0; $m < (sizeof($datahargaarr) * sizeof($datahargaarr)) + (sizeof($datahargaarr) - 1); $m++) {
+            if ($i < sizeof($datahargaarr)) {
+                $hasilbgh[$z] = $hasilh[$z] / $hasiljmlh[$i];
                 $i++;
                 $z++;
             } else {
@@ -439,8 +453,8 @@ class AnalisisController extends Controller
         }
 
         $counter = 0;
-        for ($i = 0; $i < $barispeng; $i++) {
-            for ($j = 0; $j < $kolompeng; $j++) {
+        for ($i = 0; $i < $barish; $i++) {
+            for ($j = 0; $j < $kolomh; $j++) {
                 $data2Dbgh[$i][$j] = $hasilbgh[$counter];
                 $counter++;
             }
@@ -450,37 +464,38 @@ class AnalisisController extends Controller
         $z = 0;
         $hasiltmh = [];
         $i = 0;
-        for ($j = 0; $j < $barispeng; $j++) {
+        for ($j = 0; $j < $barish; $j++) {
             $jumlah = 0;
-            for ($i = 0; $i < $kolompeng; $i++) {
+            for ($i = 0; $i < $kolomh; $i++) {
                 $jumlah += $data2Dbgh[$j][$i];
             }
             $hasiltmh[] = $jumlah;
         }
 
-        for ($i = 0; $i < sizeof($datapenghasilanarr); $i++) {
-            $jumlah = $hasiltmh[$i] / sizeof($datapenghasilanarr);
+        for ($i = 0; $i < sizeof($datahargaarr); $i++) {
+            $jumlah = $hasiltmh[$i] / sizeof($datahargaarr);
             $hasilpmh[] = $jumlah;
         }
 
         // Perkalian (asli)
-        for ($i = 0; $i < sizeof($datapenghasilanarr); $i++) {
-            $jumlah = $hasilpmh[$i] * $t26;
+        for ($i = 0; $i < sizeof($datahargaarr); $i++) {
+            $jumlah = $hasilpmh[$i] * $t34;
             $hasilppmh[] = $jumlah;
         }
 
-        // kriteria tanggungan
-        $hasiltang = [];
+
+        // kriteria lantai
+        $hasill = [];
         $j = 0;
         $n = 0;
         $i = 0;
-        for ($m = 0; $m < (sizeof($datatanggunganarr) * sizeof($datatanggunganarr)) + (sizeof($datatanggunganarr) - 1); $m++) {
-            if ($i < sizeof($datatanggunganarr)) {
-                $hasiltang[$n] = $datatanggunganarr[$i] / $datatanggunganarr[$j];
+        for ($m = 0; $m < (sizeof($datalantaiarr) * sizeof($datalantaiarr)) + (sizeof($datalantaiarr) - 1); $m++) {
+            if ($i < sizeof($datalantaiarr)) {
+                $hasill[$n] = $datalantaiarr[$i] / $datalantaiarr[$j];
                 $i++;
                 $n++;
             } else {
-                if ($j < sizeof($datatanggunganarr)) {
+                if ($j < sizeof($datalantaiarr)) {
                     $j++;
                     $i = 0;
                 }
@@ -488,15 +503,15 @@ class AnalisisController extends Controller
         }
 
         // Jumlah kolom dan baris
-        $barisl = sizeof($datatanggunganarr);
-        $koloml = sizeof($datatanggunganarr);
+        $barisl = sizeof($datalantaiarr);
+        $koloml = sizeof($datalantaiarr);
         $data2Dl = array();
 
         // konversi jadi array 2d
         $counter = 0;
         for ($i = 0; $i < $barisl; $i++) {
             for ($j = 0; $j < $koloml; $j++) {
-                $data2Dl[$i][$j] = $hasiltang[$counter];
+                $data2Dl[$i][$j] = $hasill[$counter];
                 $counter++;
             }
         }
@@ -515,9 +530,9 @@ class AnalisisController extends Controller
         $z = 0;
         $hasilbgl = [];
         $i = 0;
-        for ($m = 0; $m < (sizeof($datatanggunganarr) * sizeof($datatanggunganarr)) + (sizeof($datatanggunganarr) - 1); $m++) {
-            if ($i < sizeof($datatanggunganarr)) {
-                $hasilbgl[$z] = $hasiltang[$z] / $hasiljmll[$i];
+        for ($m = 0; $m < (sizeof($datalantaiarr) * sizeof($datalantaiarr)) + (sizeof($datalantaiarr) - 1); $m++) {
+            if ($i < sizeof($datalantaiarr)) {
+                $hasilbgl[$z] = $hasill[$z] / $hasiljmll[$i];
                 $i++;
                 $z++;
             } else {
@@ -545,28 +560,29 @@ class AnalisisController extends Controller
             $hasiltml[] = $jumlah;
         }
 
-        for ($i = 0; $i < sizeof($datatanggunganarr); $i++) {
-            $jumlah = $hasiltml[$i] / sizeof($datatanggunganarr);
+        for ($i = 0; $i < sizeof($datalantaiarr); $i++) {
+            $jumlah = $hasiltml[$i] / sizeof($datalantaiarr);
             $hasilpml[] = $jumlah;
         }
 
         // Perkalian (asli)
-        for ($i = 0; $i < sizeof($datatanggunganarr); $i++) {
-            $jumlah = $hasilpml[$i] * $t27;
+        for ($i = 0; $i < sizeof($datalantaiarr); $i++) {
+            $jumlah = $hasilpml[$i] * $t31;
             $hasilppml[] = $jumlah;
         }
-        // asset
-        $hasias = [];
+
+        // kriteria luas
+        $hasils = [];
         $j = 0;
         $n = 0;
         $i = 0;
-        for ($m = 0; $m < (sizeof($datasetarr) * sizeof($datasetarr)) + (sizeof($datasetarr) - 1); $m++) {
-            if ($i < sizeof($datasetarr)) {
-                $hasias[$n] = $datasetarr[$i] / $datasetarr[$j];
+        for ($m = 0; $m < (sizeof($dataluasarr) * sizeof($dataluasarr)) + (sizeof($dataluasarr) - 1); $m++) {
+            if ($i < sizeof($dataluasarr)) {
+                $hasils[$n] = $dataluasarr[$i] / $dataluasarr[$j];
                 $i++;
                 $n++;
             } else {
-                if ($j < sizeof($datasetarr)) {
+                if ($j < sizeof($dataluasarr)) {
                     $j++;
                     $i = 0;
                 }
@@ -574,36 +590,36 @@ class AnalisisController extends Controller
         }
 
         // Jumlah kolom dan baris
-        $bariss = sizeof($datasetarr);
-        $koloms = sizeof($datasetarr);
+        $bariss = sizeof($dataluasarr);
+        $koloms = sizeof($dataluasarr);
         $data2Ds = array();
 
         // konversi jadi array 2d
         $counter = 0;
         for ($i = 0; $i < $bariss; $i++) {
             for ($j = 0; $j < $koloms; $j++) {
-                $data2Ds[$i][$j] = $hasias[$counter];
+                $data2Ds[$i][$j] = $hasils[$counter];
                 $counter++;
             }
         }
 
         // menghitung jumlah
-        $hasiljmas = array();
+        $hasiljmls = array();
         for ($i = 0; $i < $koloms; $i++) {
             $jumlah = 0;
             for ($j = 0; $j < $bariss; $j++) {
                 $jumlah += $data2Ds[$j][$i];
             }
-            $hasiljmas[] = $jumlah;
+            $hasiljmls[] = $jumlah;
         }
 
         // Menghitung normalisasi matriks
         $z = 0;
         $hasilbgs = [];
         $i = 0;
-        for ($m = 0; $m < (sizeof($datasetarr) * sizeof($datasetarr)) + (sizeof($datasetarr) - 1); $m++) {
-            if ($i < sizeof($datasetarr)) {
-                $hasilbgs[$z] = $hasias[$z] / $hasiljmas[$i];
+        for ($m = 0; $m < (sizeof($dataluasarr) * sizeof($dataluasarr)) + (sizeof($dataluasarr) - 1); $m++) {
+            if ($i < sizeof($dataluasarr)) {
+                $hasilbgs[$z] = $hasils[$z] / $hasiljmls[$i];
                 $i++;
                 $z++;
             } else {
@@ -631,28 +647,29 @@ class AnalisisController extends Controller
             $hasiltms[] = $jumlah;
         }
 
-        for ($i = 0; $i < sizeof($datasetarr); $i++) {
-            $jumlah = $hasiltms[$i] / sizeof($datasetarr);
+        for ($i = 0; $i < sizeof($dataluasarr); $i++) {
+            $jumlah = $hasiltms[$i] / sizeof($dataluasarr);
             $hasilpms[] = $jumlah;
         }
 
         // Perkalian (asli)
-        for ($i = 0; $i < sizeof($datasetarr); $i++) {
-            $jumlah = $hasilpms[$i] * $t28;
+        for ($i = 0; $i < sizeof($dataluasarr); $i++) {
+            $jumlah = $hasilpms[$i] * $t33;
             $hasilppms[] = $jumlah;
         }
 
+        // kriteria kamar
         $hasilk = [];
         $j = 0;
         $n = 0;
         $i = 0;
-        for ($m = 0; $m < (sizeof($datasetarr) * sizeof($datasetarr)) + (sizeof($datasetarr) - 1); $m++) {
-            if ($i < sizeof($datasetarr)) {
-                $hasilk[$n] = $datasetarr[$i] / $datasetarr[$j];
+        for ($m = 0; $m < (sizeof($datakamararr) * sizeof($datakamararr)) + (sizeof($datakamararr) - 1); $m++) {
+            if ($i < sizeof($datakamararr)) {
+                $hasilk[$n] = $datakamararr[$i] / $datakamararr[$j];
                 $i++;
                 $n++;
             } else {
-                if ($j < sizeof($datasetarr)) {
+                if ($j < sizeof($datakamararr)) {
                     $j++;
                     $i = 0;
                 }
@@ -660,8 +677,8 @@ class AnalisisController extends Controller
         }
 
         // Jumlah kolom dan baris
-        $barisk = sizeof($datasetarr);
-        $kolomk = sizeof($datasetarr);
+        $barisk = sizeof($datakamararr);
+        $kolomk = sizeof($datakamararr);
         $data2Dk = array();
 
         // konversi jadi array 2d
@@ -687,8 +704,8 @@ class AnalisisController extends Controller
         $z = 0;
         $hasilbgk = [];
         $i = 0;
-        for ($m = 0; $m < (sizeof($datasetarr) * sizeof($datasetarr)) + (sizeof($datasetarr) - 1); $m++) {
-            if ($i < sizeof($datasetarr)) {
+        for ($m = 0; $m < (sizeof($datakamararr) * sizeof($datakamararr)) + (sizeof($datakamararr) - 1); $m++) {
+            if ($i < sizeof($datakamararr)) {
                 $hasilbgk[$z] = $hasilk[$z] / $hasiljmlk[$i];
                 $i++;
                 $z++;
@@ -717,24 +734,25 @@ class AnalisisController extends Controller
             $hasiltmk[] = $jumlah;
         }
 
-        for ($i = 0; $i < sizeof($datasetarr); $i++) {
-            $jumlah = $hasiltmk[$i] / sizeof($datasetarr);
+        for ($i = 0; $i < sizeof($datakamararr); $i++) {
+            $jumlah = $hasiltmk[$i] / sizeof($datakamararr);
             $hasilpmk[] = $jumlah;
         }
 
         // Perkalian (asli)
-        for ($i = 0; $i < sizeof($datasetarr); $i++) {
-            $jumlah = $hasilpmk[$i] * $t28;
+        for ($i = 0; $i < sizeof($datakamararr); $i++) {
+            $jumlah = $hasilpmk[$i] * $t32;
             $hasilppmk[] = $jumlah;
         }
 
+        $idPes = DB::table('pesertas')
+            ->pluck('id');
         $tipe = DB::table('pesertas')
             ->select('id_siswa')
             ->get();
         $beasiswa = DB::table('pesertas')
             ->select('id_beasiswa')
             ->get();
-
         $penghasilant = DB::table('pesertas')
             ->select('penghasilan')
             ->get();
@@ -747,21 +765,30 @@ class AnalisisController extends Controller
         $asset = DB::table('pesertas')
             ->select('asset')
             ->get();
-
-        for ($i = 0; $i < sizeof($datapenghasilanarr); $i++) {
+        $kelas = DB::table('pesertas')
+            ->select('id_kelas')
+            ->get();
+        for ($i = 0; $i < sizeof($datahargaarr); $i++) {
             $hasiljumlah[] = $hasilppmh[$i] + $hasilppml[$i] + $hasilppmk[$i] + $hasilppms[$i];
         }
+        $pesertaGroupedByKelas = DB::table('pesertas')
+            ->select('id_siswa', 'id_kelas')
+            ->get()
+            ->groupBy('id_kelas');
+        $kuota = DB::table('kuotas')
+            ->select('id_kelas', 'kuota')
+            ->distinct()
+            ->get()
+            ->keyBy('id_kelas');
 
-        $kota = DB::table('beasiswas')
-            ->select('kuota')
-            ->limit(1)
-            ->get();
 
-        for ($i = 0; $i < sizeof($datapenghasilanarr); $i++) {
+        for ($i = 0; $i < sizeof($datahargaarr); $i++) {
             if (isset($tipe[$i], $penghasilant[$i], $tanggungant[$i], $pekerjaant[$i], $asset[$i], $hasiljumlah[$i])) {
                 Hasil::create([
                     'id_siswa' => $tipe[$i]->id_siswa,
                     'id_beasiswa' => $beasiswa[$i]->id_beasiswa,
+                    'id_peserta' => $idPes[$i],
+                    'id_kelas' => $kelas[$i]->id_kelas,
                     'penghasilan' => $penghasilant[$i]->penghasilan,
                     'tanggungan' => $tanggungant[$i]->tanggungan,
                     'pekerjaan' => $pekerjaant[$i]->pekerjaan,
@@ -769,20 +796,29 @@ class AnalisisController extends Controller
                     'ahp' => $hasiljumlah[$i]
                 ]);
 
-                if ($i < $kota[0]->kuota) {
-                    DB::table('pesertas')
-                        ->where('id_siswa', $tipe[$i]->id_siswa)
-                        ->update(['status' => 'Lolos']);
-                } else {
-                    DB::table('pesertas')
-                        ->where('id_siswa', $tipe[$i]->id_siswa)
-                        ->update(['status' => 'Tidak Lolos']);
+                foreach ($pesertaGroupedByKelas as $idKelas => $pesertaKelas) {
+                    // Dapatkan kuota untuk kelas ini
+                    $kuotaKelas = $kuota[$idKelas]->kuota ?? 0;
+
+                    // Iterasi setiap peserta dalam kelas ini
+                    foreach ($pesertaKelas as $index => $peserta) {
+                        if ($index < $kuotaKelas) {
+                            // Jika peserta masuk dalam kuota, update status menjadi 'Lolos'
+                            DB::table('pesertas')
+                                ->where('id_siswa', $peserta->id_siswa)
+                                ->update(['status' => 'Lolos']);
+                        } else {
+                            // Jika peserta tidak masuk dalam kuota, update status menjadi 'Tidak Lolos'
+                            DB::table('pesertas')
+                                ->where('id_siswa', $peserta->id_siswa)
+                                ->update(['status' => 'Tidak Lolos']);
+                        }
+                    }
                 }
-            } else {
             }
         }
 
-        $datahasil = Hasil::all();
+        $datahasil = Hasil::where('id_beasiswa', $id)->get();
 
         $datamax = DB::table('hasils')
             ->orderBy('ahp', 'desc')

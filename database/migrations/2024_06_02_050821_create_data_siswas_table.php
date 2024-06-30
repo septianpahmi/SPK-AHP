@@ -18,17 +18,11 @@ class CreateDataSiswasTable extends Migration
             $table->integer('nis');
             $table->string('nama');
             $table->string('gender');
-            $table->integer('semester');
-            $table->year('tahun_masuk');
             $table->string('tempat_lahir');
             $table->date('tgl_lahir');
             $table->text('alamat');
             $table->string('nama_ayah');
-            $table->string('pekerjaan_ayah');
             $table->string('nama_ibu');
-            $table->string('pekerjaan_ibu');
-            $table->integer('anak_ke');
-            $table->integer('saudara');
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_kelas');
             $table->timestamps();

@@ -17,9 +17,10 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('nis')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['TU', 'komite', 'user'])->default('user');
+            $table->enum('role', ['kepsek', 'TU', 'komite', 'siswa'])->default('siswa');
             $table->string('kode_akses')->nullable();
             $table->enum('status', ['Lengkap', 'Tidak lengkap'])->default('Tidak lengkap');
             $table->rememberToken();

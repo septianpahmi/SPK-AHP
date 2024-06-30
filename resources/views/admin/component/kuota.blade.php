@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Users</h1>
+                    <h1 class="m-0">Kuota</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ 'dashboard' }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item active">Kuota</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -27,26 +27,23 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Tabel data users</h3>
+                            <h3 class="card-title">Tabel data kuota</h3>
                             <div class="text-right">
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#users">
-                                    Tambah users
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#kuota">
+                                    Tambah kuota
                                 </button>
                             </div>
                         </div>
-                        @extends('admin.layout.modals')
+                        @extends('admin.layout.kuota-modals')
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Nama</th>
-                                        <th>NIS</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Kode Akses</th>
-                                        <th>Data Siswa</th>
+                                        <th>Nama Beasiswa</th>
+                                        <th>Kelas</th>
+                                        <th>Kuota</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -54,27 +51,17 @@
                                     @foreach ($data as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            @if ($item->nis)
-                                                <td>{{ $item->nis }}</td>
-                                            @else
-                                                <td style="color:#808080">Tidak ada NIS</td>
-                                            @endif
-                                            <td>{{ $item->email }}</td>
-                                            <td><button type="button"
-                                                    class="btn btn-sm btn-outline-primary">{{ $item->role }}</button>
-                                            </td>
-                                            <td>{{ $item->kode_akses }}</td>
-                                            <td><button type="button"
-                                                    class="btn btn-sm {{ $item->status == 'Lengkap' ? 'btn-outline-success' : 'btn-outline-danger' }}">{{ $item->status }}</button>
-                                            </td>
+                                            <td>{{ $item->idBeasiswa->nama_beasiswa }}</td>
+                                            <td>{{ $item->idKelas->tingkat }} {{ $item->idKelas->jurusan }}
+                                                {{ $item->idKelas->kelas }}</td>
+                                            <td>{{ $item->kuota }}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#users{{ $item->id }}">
+                                                        data-target="#kuota{{ $item->id }}">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <button url="{{ route('users.delete', $item->id) }}" type="button"
+                                                    <button url="{{ route('kuota.delete', $item->id) }}" type="button"
                                                         class="btn btn-danger delete" data-id="{{ $item->id }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
@@ -85,62 +72,57 @@
                             </table>
                         </div>
                         @foreach ($data as $item)
-                            <div class="modal fade" id="users{{ $item->id }}">
+                            <div class="modal fade" id="kuota{{ $item->id }}">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Edit Users</h4>
+                                            <h4 class="modal-title">Edit Kuota</h4>
                                             <button type="button" class="close" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('users.update', $item->id) }}" method="POST"
+                                            <form action="{{ route('kuota.update', $item->id) }}" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <label>Nama Lengkap</label>
-                                                            <input type="text" class="form-control" name="name"
-                                                                value="{{ $item->name }}"
-                                                                placeholder="Masukan nama lengkap" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <label>NIS</label>
-                                                            <input type="text" class="form-control" name="nis"
-                                                                value="{{ $item->nis }}" placeholder="Masukan nis">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            <label>Email</label>
-                                                            <input type="email" class="form-control" name="email"
-                                                                value="{{ $item->email }}" placeholder="Masukan email"
+                                                            <label>Beasiswa</label>
+                                                            <select type="text" class="form-control"
+                                                                name="id_beasiswa" placeholder="Masukan nama kriteria"
                                                                 required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <!-- select -->
-                                                        <div class="form-group">
-                                                            <label>Role</label>
-                                                            <select class="form-control" name="role"
-                                                                value="{{ $item->role }}" required>
-                                                                <option value="komite">Komite</option>
-                                                                <option value="TU">Tata Usaha</option>
-                                                                <option value="user">User</option>
+                                                                <option value="">Pilih Beasiswa</option>
+                                                                @foreach ($beasiswa as $bea)
+                                                                    <option value="{{ $bea->id }}"
+                                                                        @readonly(true)>
+                                                                        {{ $bea->nama_beasiswa }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <label>Password</label>
-                                                            <input type="text" class="form-control" name="password"
-                                                                value="{{ $item->kode_akses }}"
-                                                                placeholder="Masukan password" required>
+                                                            <label>Kelas</label>
+                                                            <select type="text" class="form-control" name="id_kelas"
+                                                                placeholder="Masukan nama kriteria" required>
+                                                                <option value="" @readonly(true)>Pilih Kelas
+                                                                </option>
+                                                                @foreach ($kelas as $kel)
+                                                                    <option value="{{ $kel->id }}">
+                                                                        {{ $kel->tingkat }} {{ $kel->jurusan }}
+                                                                        {{ $kel->kelas }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Kuota</label>
+                                                            <input type="number" value="{{ $item->kuota }}"
+                                                                class="form-control" name="kuota"
+                                                                placeholder="Masukan kuota" required>
                                                         </div>
                                                     </div>
                                                 </div>

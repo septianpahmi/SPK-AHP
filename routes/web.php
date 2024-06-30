@@ -7,11 +7,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\BeasiswaController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\HasilController;
 use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\KuotaController;
 use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SubKriteriaController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,14 +59,20 @@ Route::get('/kriteria', [KriteriaController::class, 'index'])->middleware(['auth
 Route::post('/kriteria/post', [KriteriaController::class, 'post'])->middleware(['auth'])->name('kriteria.post');
 Route::post('/kriteria/update/{id}', [KriteriaController::class, 'update'])->middleware(['auth'])->name('kriteria.update');
 Route::get('/kriteria/delete/{id}', [KriteriaController::class, 'delete'])->middleware(['auth'])->name('kriteria.delete');
+//kuota
+Route::get('/kuota', [KuotaController::class, 'index'])->middleware(['auth'])->name('kuota');
+Route::post('/kuota/post', [KuotaController::class, 'post'])->middleware(['auth'])->name('kuota.post');
+Route::post('/kuota/update/{id}', [KuotaController::class, 'update'])->middleware(['auth'])->name('kuota.update');
+Route::get('/kuota/delete/{id}', [KuotaController::class, 'delete'])->middleware(['auth'])->name('kuota.delete');
 //peserta
 Route::get('/peserta', [PesertaController::class, 'index'])->middleware(['auth'])->name('peserta');
-Route::post('/peserta/post', [PesertaController::class, 'post'])->middleware(['auth'])->name('peserta.post');
-Route::post('/peserta/update/{id}', [PesertaController::class, 'update'])->middleware(['auth'])->name('peserta.update');
 Route::get('/peserta/delete/{id}', [PesertaController::class, 'delete'])->middleware(['auth'])->name('peserta.delete');
 Route::get('/peserta/approve/{id}', [PesertaController::class, 'approve'])->middleware(['auth'])->name('peserta.approve');
 Route::get('/peserta/disapprove/{id}', [PesertaController::class, 'disapprove'])->middleware(['auth'])->name('peserta.disapprove');
 Route::get('/peserta/detail/{id}', [PesertaController::class, 'detail'])->middleware(['auth'])->name('peserta.detail');
+
+Route::get('/pendaftaran/{id}', [PesertaController::class, 'pendaftaran'])->middleware(['auth'])->name('pendaftaran');
+Route::post('/pendaftaran/store/{id}', [ProfilController::class, 'store'])->middleware(['auth'])->name('pendaftaran.store');
 
 //SubKriteria
 Route::get('/subkriteria/{id}', [SubKriteriaController::class, 'index'])->middleware(['auth'])->name('subkriteria');
@@ -81,3 +90,10 @@ Route::post('/analisis/postbobot/postmatriks2/posthasilrekomendasi', [AnalisisCo
 //hasil
 Route::get('/hasil', [HasilController::class, 'index'])->middleware(['auth'])->name('hasil');
 Route::get('/hasil/delete/{id}', [HasilController::class, 'delete'])->middleware(['auth'])->name('hasil.delete');
+Route::get('/hasil/ajukan/{id}', [HasilController::class, 'ajukan'])->middleware(['auth'])->name('hasil.ajukan');
+Route::get('/hasil/verifikasi/{id}', [HasilController::class, 'verifikasi'])->middleware(['auth'])->name('hasil.lolosverifikasi');
+Route::get('/hasil/{id}', [HasilController::class, 'nonverifikasi'])->middleware(['auth'])->name('hasil.nonverifikasi');
+Route::get('/hasil-user', [HasilController::class, 'hasil'])->middleware(['auth'])->name('hasil.analisis');
+
+//file
+Route::get('/galeri', [DokumenController::class, 'index'])->middleware(['auth'])->name('galeri');

@@ -28,118 +28,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Tabel data peserta</h3>
-                            <div class="text-right">
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                    data-target="#peserta">
-                                    Tambah peserta
-                                </button>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="peserta">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Tambah Peserta</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('peserta.post') }}" method="POST"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Nama Siswa</label>
-                                                        <select class="form-control" name="id_siswa">
-                                                            @foreach ($user as $user)
-                                                                <option value="{{ $user->id }}">{{ $user->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Beasiswa</label>
-                                                        <select class="form-control" name="id_beasiswa">
-                                                            @foreach ($beasiswa as $beas)
-                                                                <option value="{{ $beas->id }}">
-                                                                    {{ $beas->nama_beasiswa }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Pekerjaan</label>
-                                                        <select class="form-control" name="pekerjaan">
-                                                            @foreach ($subkriteria as $sub)
-                                                                @if ($sub->id_kriteria == 3)
-                                                                    <option value="{{ $sub->nilai }}">
-                                                                        {{ $sub->subkriteria }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Penghasilan</label>
-                                                        <select class="form-control" name="penghasilan">
-                                                            @foreach ($subkriteria as $sub)
-                                                                @if ($sub->id_kriteria == 1)
-                                                                    <option value="{{ $sub->nilai }}">
-                                                                        {{ $sub->subkriteria }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Tanggungan</label>
-                                                        <select class="form-control" name="tanggungan">
-                                                            @foreach ($subkriteria as $sub)
-                                                                @if ($sub->id_kriteria == 2)
-                                                                    <option value="{{ $sub->nilai }}">
-                                                                        {{ $sub->subkriteria }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label>Asset</label>
-                                                        <select class="form-control" name="asset">
-                                                            @foreach ($subkriteria as $sub)
-                                                                @if ($sub->id_kriteria == 4)
-                                                                    <option value="{{ $sub->nilai }}">
-                                                                        {{ $sub->subkriteria }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer justify-content-between">
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -148,6 +36,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Nama Siswa</th>
+                                        <th>Kelas</th>
                                         <th>Beasiswa</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -162,6 +51,8 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->idSiswa->name }}</td>
+                                                <td>{{ $item->idKelas->tingkat }} {{ $item->idKelas->jurusan }}
+                                                    {{ $item->idKelas->kelas }}</td>
                                                 <td>{{ $item->idBeasiswa->nama_beasiswa }}</td>
                                                 <td>{{ $item->status }}</td>
                                                 <td>
@@ -186,6 +77,8 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->idSiswa->name }}</td>
+                                                <td>{{ $item->idKelas->tingkat }} {{ $item->idKelas->jurusan }}
+                                                    {{ $item->idKelas->kelas }}</td>
                                                 <td>{{ $item->idBeasiswa->nama_beasiswa }}</td>
                                                 <td>{{ $item->status }}</td>
                                                 <td>

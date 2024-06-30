@@ -31,7 +31,7 @@ class SubSeeder extends Seeder
                 'id_kriteria' => '1',
             ],
             [
-                'subkriteria' => '< 3000000',
+                'subkriteria' => '> 3000000',
                 'nilai' => '2',
                 'id_kriteria' => '1',
             ],
@@ -51,7 +51,7 @@ class SubSeeder extends Seeder
                 'id_kriteria' => '2',
             ],
             [
-                'subkriteria' => '< 2',
+                'subkriteria' => '<= 2',
                 'nilai' => '2',
                 'id_kriteria' => '2',
             ],
@@ -61,7 +61,7 @@ class SubSeeder extends Seeder
                 'id_kriteria' => '3',
             ],
             [
-                'subkriteria' => 'Lainnya/ Pekerja Harian',
+                'subkriteria' => 'Lainnya/ Pekerja Buruh',
                 'nilai' => '4',
                 'id_kriteria' => '3',
             ],
@@ -88,6 +88,11 @@ class SubSeeder extends Seeder
             [
                 'subkriteria' => 'Mobil',
                 'nilai' => '3',
+                'id_kriteria' => '4',
+            ],
+            [
+                'subkriteria' => 'Rumah',
+                'nilai' => '2',
                 'id_kriteria' => '4',
             ],
         ];

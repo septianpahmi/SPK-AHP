@@ -11,21 +11,14 @@
                 <form action="{{ route('kelas.post') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Tingkat</label>
                                 <input type="text" class="form-control" name="tingkat"
                                     placeholder="Masukan tingkat kelas" required>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Jurusan</label>
-                                <input type="text" class="form-control" name="jurusan" placeholder="Masukan jurusan"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Kelas</label>
                                 <input type="text" class="form-control" name="kelas" placeholder="Masukan kelas"
@@ -60,14 +53,20 @@
                 <form action="{{ route('users.post') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
                                 <input type="text" class="form-control" name="name"
                                     placeholder="Masukan nama lengkap" required>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>NIS</label>
+                                <input type="text" class="form-control" name="nis" placeholder="Masukan nis">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" class="form-control" name="email" placeholder="Masukan email"
@@ -81,7 +80,7 @@
                                 <select class="form-control" name="role">
                                     <option value="komite">Komite</option>
                                     <option value="TU">Tata Usaha</option>
-                                    <option value="user">User</option>
+                                    <option value="siswa">Siswa</option>
                                 </select>
                             </div>
                         </div>
@@ -120,18 +119,11 @@
                 <form action="{{ route('beasiswa.post') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Nama Beasiswa</label>
                                 <input type="text" class="form-control" name="nama_beasiswa"
                                     placeholder="Masukan nama beasiswa" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Kuota</label>
-                                <input type="text" class="form-control" name="kuota"
-                                    placeholder="Masukan kuota" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -202,6 +194,7 @@
         <!-- /.modal-dialog -->
     </div>
 </div>
+
 
 {{-- <div class="modal fade" id="alternativ">
     <div class="modal-dialog modal-lg">

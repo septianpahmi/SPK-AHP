@@ -18,7 +18,6 @@ class CreateBeasiswasTable extends Migration
             $table->string('nama_beasiswa');
             $table->text('ket');
             $table->year('tahun');
-            $table->integer('kuota');
             $table->timestamps();
         });
     }

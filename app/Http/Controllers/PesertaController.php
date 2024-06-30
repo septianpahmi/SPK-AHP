@@ -2,47 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Beasiswa;
-use App\Models\Comparisons;
-use App\Models\DataSiswa;
-use App\Models\Kelas;
-use App\Models\Kriteria;
-use App\Models\Peserta;
-use App\Models\Subkriteria;
+use auth;
 use App\Models\User;
+use App\Models\Kelas;
+use App\Models\Peserta;
+use App\Models\Beasiswa;
+use App\Models\Kriteria;
+use App\Models\DataSiswa;
+use App\Models\Comparisons;
+use App\Models\Subkriteria;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class PesertaController extends Controller
 {
     public function index()
     {
-        $user = User::where('role', 'user')->get();
-        $kriteria = Kriteria::all();
-        // $idKriteria = $kriteria->first()->id;
-        // $subkriteria = Subkriteria::where('id_kriteria', $idKriteria)->get();
-        $subkriteria = Subkriteria::all();
-        $beasiswa = Beasiswa::all();
         $data = Peserta::all();
-        return view('admin.component.peserta', compact('data', 'user', 'kriteria', 'subkriteria', 'beasiswa'));
+        return view('admin.component.peserta', compact('data'));
     }
-
-    public function post(Request $request)
+    public function pendaftaran($id)
     {
-        $pesertaData = [
-            'id_siswa' => $request->id_siswa,
-            'id_beasiswa' => $request->id_beasiswa,
-            'status' => "Mendaftar",
-            'penghasilan' => $request->penghasilan,
-            'pekerjaan' => $request->pekerjaan,
-            'tanggungan' => $request->tanggungan,
-            'asset' => $request->asset
-        ];
-        Peserta::create($pesertaData);
-
-        if ($pesertaData['status'] == 'Diproses') {
-            Comparisons::create($pesertaData);
+        $user = auth()->user()->id;
+        $kriteria = Kriteria::all();
+        $subkriteria = Subkriteria::all();
+        $beasiswa = Beasiswa::find($id);
+        $kelas = Kelas::all();
+        $cekUser = Peserta::where('id_siswa', $user)->where('id_beasiswa', $id)->first();
+        if ($cekUser) {
+            return redirect('/dashboard')->with('error', 'Anda hanya dapat mendaftar satu kali mendaftar pada satu beasiswa.');
         }
-        return redirect('/peserta')->with('success', 'Peserta berhasil ditambah');
+        return view('admin.layout.pendaftaran', compact('kriteria', 'subkriteria', 'beasiswa', 'kelas'));
     }
 
     public function approve($id)
@@ -76,7 +67,7 @@ class PesertaController extends Controller
     public function delete($id)
     {
         $data = Peserta::find($id);
-        $comp = Comparisons::where('id_peserta', $id);
+        Comparisons::where('id_peserta', $id);
         if ($data) {
             $data->delete();
         }

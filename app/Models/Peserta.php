@@ -14,12 +14,15 @@ class Peserta extends Model
     protected $fillable = [
         'id_siswa',
         'id_beasiswa',
+        'id_kelas',
         'id_subkriteria',
         'penghasilan',
         'tanggungan',
         'pekerjaan',
         'asset',
         'status',
+        'sktm',
+        'dok_lainnya',
     ];
 
     public function idSiswa()
@@ -29,5 +32,9 @@ class Peserta extends Model
     public function idBeasiswa()
     {
         return $this->belongsTo(Beasiswa::class, 'id_beasiswa');
+    }
+    public function idKelas()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
     }
 }

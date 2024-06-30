@@ -46,16 +46,12 @@
                                     Jenis Kelamin<br>
                                     Tempat, Tanggal Lahir<br>
                                     Kelas<br>
-                                    Semester <br>
-                                    Tahun Masuk<br>
                                 </address>
                             </div>
                             <div class=" invoice-col">
                                 <br>
                                 <br>
                                 <address>
-                                    :<br>
-                                    :<br>
                                     :<br>
                                     :<br>
                                     :<br>
@@ -74,8 +70,6 @@
                                     {{ $siswa->tempat_lahir }}, {{ date('d M Y', strtotime($siswa->tgl_lahir)) }}<br>
                                     {{ $siswa->idKelas->tingkat }} {{ $siswa->idKelas->jurusan }}
                                     {{ $siswa->idKelas->kelas }}<br>
-                                    {{ $siswa->semester }}<br>
-                                    {{ $siswa->tahun_masuk }}<br>
                                 </address>
                             </div>
                             <!-- /.col -->
@@ -83,11 +77,7 @@
                                 <br><b>Informasi Wali Siswa</b>
                                 <address>
                                     Nama Ayah<br>
-                                    Pekerjaan Ayah<br>
                                     Nama Ibu<br>
-                                    Pekerjaan Ibu<br>
-                                    Anak ke<br>
-                                    Jumlah Saudara <br>
                                     Alamat<br>
                                 </address>
                             </div>
@@ -98,10 +88,6 @@
                                     :<br>
                                     :<br>
                                     :<br>
-                                    :<br>
-                                    :<br>
-                                    :<br>
-                                    :<br>
                                 </address>
                             </div>
                             <div class="col-sm-2 invoice-col">
@@ -109,11 +95,7 @@
                                 <br>
                                 <address>
                                     {{ $siswa->nama_ayah }}<br>
-                                    {{ $siswa->pekerjaan_ayah }}<br>
                                     {{ $siswa->nama_ibu }}<br>
-                                    {{ $siswa->pekerjaan_ibu }}<br>
-                                    {{ $siswa->anak_ke }}<br>
-                                    {{ $siswa->saudara }}<br>
                                     {{ $siswa->alamat }}<br>
                                 </address>
                             </div>
@@ -132,6 +114,8 @@
                                             <th>PO</th>
                                             <th>TO</th>
                                             <th>ASSET</th>
+                                            <th>SKTM</th>
+                                            <th>Dokumen lainnya</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -186,7 +170,22 @@
                                             @elseif($data->asset == 3)
                                                 <td>
                                                     Mobil</td>
+                                            @elseif($data->asset == 2)
+                                                <td>
+                                                    Rumah</td>
                                             @endif
+                                            <td>
+                                                <iframe src="/file/sktm/{{ $data->sktm }}" height="100px"
+                                                    width="100px" frameborder="0"></iframe>
+                                                <a href="/file/sktm/{{ $data->sktm }}" download>Download</a>
+                                            </td>
+                                            <td>
+
+                                                <iframe src="/file/dok_lainnya/{{ $data->dok_lainnya }}" height="100px"
+                                                    width="100px" frameborder="0"></iframe>
+                                                <a href="/file/dok_lainnya/{{ $data->dok_lainnya }}"
+                                                    download>Download</a>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

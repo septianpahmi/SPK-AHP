@@ -33,7 +33,14 @@
                         <div class="card-body">
                             <form action="{{ route('posthasilrekomendasi') }}" method="POST">
                                 @csrf
-
+                                <div class="form-group">
+                                    <label for="beasiswa">Pilih Beasiswa yang akan dihitung</label>
+                                    <select name="beasiswa" id="beasiswa" name="beasiswa" class="form-control">
+                                        @foreach ($data as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama_beasiswa }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -76,7 +83,7 @@
                                             <td><input type="number" class="form-control" name="k8"
                                                     value="{{ $k8 }}" readonly></td>
                                             <td><input type="number" class="form-control" name="k26"
-                                                    value="{{ $k26 }}" readonly></td>
+                                                    value="{{ $k26 }}" readonly></td> 
                                             <td><input type="number" class="form-control" name="k22"
                                                     value="{{ $k22 }}" readonly></td>
                                             <td><input type="number" class="form-control" name="hs2"
